@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Painter = () => {
   const canvasRef = useRef(null);
@@ -9,6 +10,9 @@ const Painter = () => {
   const [history, setHistory] = useState([]);
   const [currentStep, setCurrentStep] = useState(-1);
   const [tool, setTool] = useState("brush");
+  const [timeLeft, setTimeLeft] = useState(90); // 1:30 in seconds
+  const [round, setRound] = useState(1);
+  const navigate = useNavigate();
 
   const CANVAS_WIDTH = 800;
   const CANVAS_HEIGHT = 600;
@@ -20,6 +24,28 @@ const Painter = () => {
     context.lineJoin = "round";
     saveState();
   }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prevTime) => {
+        if (prevTime <= 1) {
+          clearInterval(timer);
+          if (round < 3) {
+            setRound(round + 1);
+            clearCanvas();
+            nextCanvas();
+            saveImage();
+            return 90; // Reset timer to 1:30
+          } else {
+            navigate("/results");
+          }
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [round, navigate]);
 
   const saveState = () => {
     const canvas = canvasRef.current;
@@ -119,11 +145,16 @@ const Painter = () => {
     }
   };
 
-  const clearCanvas = () => {
+  const clearCanvasWithoutSaving = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
+  };
+
+  const clearCanvas = () => {
+    clearCanvasWithoutSaving();
     saveState();
+    setTimeLeft(90); // Reset timer to 1:30
   };
 
   const floodFill = (x, y, fillColor) => {
@@ -196,12 +227,35 @@ const Painter = () => {
     return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255, 255];
   };
 
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  };
+
+  const nextCanvas = () => {
+    saveImage();
+    if (round < 3) {
+      setRound(round + 1);
+      clearCanvasWithoutSaving();
+      setTimeLeft(90); // Reset timer to 1:30
+      setHistory([]); // Clear the undo/redo history
+      setCurrentStep(-1); // Reset the current step
+    } else {
+      navigate("/results");
+    }
+  };
+
   return (
-    <div className="h-screen bg-[#F5E6D3] p-4 font-comic-sans flex flex-col items-center">
+    <div className="h-screen bg-[#fbe5c8] p-4 font-comic-sans flex flex-col items-center">
       <h1 className="text-4xl font-bold mb-4 text-center bg-black text-white p-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full max-w-3xl transform rotate-1">
         GOOSE PAINTER 🪿
       </h1>
       <div className="flex-grow bg-[#C4A484] p-4 border-4 border-black border-dashed shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col w-full max-w-3xl transform -rotate-1">
+        <div className="flex justify-between items-center mb-4">
+          <div className="text-2xl font-bold">Canvas: {round}/3</div>
+          <div className="text-2xl font-bold">Time: {formatTime(timeLeft)}</div>
+        </div>
         <div className="flex-grow flex flex-col">
           <div className="flex flex-wrap gap-2 mb-4 justify-center">
             <label className="flex items-center bg-yellow-300 p-2 border-2 border-black transform rotate-2">
@@ -264,10 +318,10 @@ const Painter = () => {
               Erase All! 🧽
             </button>
             <button
-              onClick={saveImage}
+              onClick={nextCanvas}
               className="bg-purple-400 px-3 py-1 font-bold border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform -rotate-2"
             >
-              Save Masterpiece 🖼️
+              Next Canvas 🖼️
             </button>
           </div>
           <div

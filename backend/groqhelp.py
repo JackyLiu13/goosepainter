@@ -18,8 +18,9 @@ collection = db['games']
 
 
 def create_new_game(username: str):
+    code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8)),
     result = collection.insert_one({
-        "code": ''.join(random.choices(string.ascii_uppercase + string.digits, k=8)),
+        "code": code,
         "users": [{
             "name": username,
             "description": [],
@@ -70,7 +71,7 @@ def get_image_descriptions(num:int):
     completion = client.chat.completions.create(
         messages=[
             {
-                 "role": "user",
+                "role": "user",
                 "content": [
                     {
                         "type": "text",

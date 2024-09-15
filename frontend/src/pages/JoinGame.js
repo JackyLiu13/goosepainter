@@ -1,15 +1,29 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const JoinGame = () => {
-  const [code, setCode] = useState('');
-  const [name, setName] = useState('');
+  const [code, setCode] = useState("");
+  const [name, setName] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // For now, we're not validating the code
-    navigate('/lobby', { state: { playerName: name } });
+
+    const response = await fetch("http://127.0.0.1:8000/join", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ code, name }),
+    });
+
+    if (response.ok) {
+      navigate("/lobby", { state: { playerName: name } });
+    } else {
+      // Handle error
+      console.error("Failed to join game");
+    }
   };
 
   return (
@@ -36,7 +50,7 @@ const JoinGame = () => {
           className="w-full px-4 py-2 mb-6 text-lg rounded-lg shadow-md"
           required
         />
-        <button 
+        <button
           type="submit"
           className="w-full px-5 py-2 text-lg bg-black text-white rounded-lg shadow-md hover:bg-gray-800"
         >
