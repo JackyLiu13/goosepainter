@@ -1,6 +1,9 @@
 import os
 from groq import Groq
 import base64
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def get_image_descriptions():

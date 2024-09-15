@@ -90,37 +90,34 @@ const Painter = () => {
 
   const saveImage = async () => {
     const canvas = canvasRef.current;
-    const base64Canvas = canvas.toDataURL("image/png").split(';base64,')[1];
+    const base64Canvas = canvas.toDataURL("image/png").split(";base64,")[1];
     console.log(base64Canvas);
     //canvas.toDataURL(async (blob) => {
-      //const formData = new FormData();
-      //formData.append("file", blob, "painting.png");
-      //console.log(blob);
-      
+    //const formData = new FormData();
+    //formData.append("file", blob, "painting.png");
+    //console.log(blob);
 
-      try {
-        const response = await fetch("http://localhost:8000/image", {
-          method: "POST",
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            "image": base64Canvas
-          }),
-        });
+    try {
+      const response = await fetch("http://localhost:8000/image", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          image: base64Canvas,
+        }),
+      });
 
-        if (response.ok) {
-          console.log("Image uploaded successfully");
-        } else {
-          console.error("Image upload failed");
-        }
-      } catch (error) {
-        console.error("Error uploading image:", error);
+      if (response.ok) {
+        console.log("Image uploaded successfully");
+      } else {
+        console.error("Image upload failed");
       }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
   };
-
-  
 
   const clearCanvas = () => {
     const canvas = canvasRef.current;
@@ -204,7 +201,7 @@ const Painter = () => {
       <h1 className="text-4xl font-bold mb-4 text-center bg-black text-white p-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full max-w-3xl transform rotate-1">
         GOOSE PAINTER 🪿
       </h1>
-      <div className="flex-grow bg-white p-4 border-4 border-black border-dashed shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col w-full max-w-3xl transform -rotate-1">
+      <div className="flex-grow bg-[#C4A484] p-4 border-4 border-black border-dashed shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col w-full max-w-3xl transform -rotate-1">
         <div className="flex-grow flex flex-col">
           <div className="flex flex-wrap gap-2 mb-4 justify-center">
             <label className="flex items-center bg-yellow-300 p-2 border-2 border-black transform rotate-2">
@@ -278,7 +275,7 @@ const Painter = () => {
             className="flex-grow flex justify-center items-center"
           >
             <div
-              className="relative"
+              className="relative bg-white"
               style={{ width: CANVAS_WIDTH, height: CANVAS_HEIGHT }}
             >
               <canvas
