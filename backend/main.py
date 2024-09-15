@@ -1,8 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import cohere
-
+import base64
 # Initialize FastAPI app
 app = FastAPI()
 
@@ -14,6 +14,22 @@ app.add_middleware(
     allow_methods=["*"],  # Allow all HTTP methods
     allow_headers=["*"],  # Allow all headers
 )
+
+@app.get("/")
+def read_root():
+    return {"message": "Hello, FastAPI!"}
+
+class Item(BaseModel):
+    name: str
+    description: str = None
+
+@app.post("/items/")
+def create_item(item: Item):
+    return {"message": f"Item received: {item.name}", "description": item.description}
+
+@app.get("/test")
+def read_test():
+    return {"message": "Hello, Test!"}
 
 # Initialize Cohere Client with your API Key
 co = cohere.Client("e2FG8cmDuOJVluFg34peBFtOHK3Absgefg8BhsvB")  # Replace with your actual API key
