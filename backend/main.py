@@ -5,6 +5,8 @@ import cohere
 import base64
 import os
 import groqhelp
+import json
+
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -79,9 +81,18 @@ def evaluate_story(request: StoryEvaluationRequest):
 
 count = 0 
 
+@app.post('/create')   
+async def create_new_game(username: str):
+    return groqhelp.create_new_game(username)
+     
+@app.post('/join')
+async def join_game(code: str, username: str):
+    return groqhelp.join_game(code, username)
+    
 @app.post('/image')
 async def grab_image(data: dict):
     count = 0
+    
     for file in os.listdir('./images'):
         if file[-3:] == "png":
             count += 1
@@ -89,7 +100,7 @@ async def grab_image(data: dict):
     with open("./images/imageToSave" + str(count) +".png", "wb") as fh:
         fh.write(base64.decodebytes(data.get('image').encode()))
     
-    groqhelp.get_image_descriptions()
+    groqhelp.get_image_descriptions(count)
     
     return {"message": "Image received"}
     
