@@ -1,6 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import base64
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -29,3 +30,16 @@ def create_item(item: Item):
 @app.get("/test")
 def read_test():
     return {"message": "Hello, Test!"}
+
+count = 0 
+
+@app.post('/image')
+async def grab_image(data: dict):
+    #print(data.get('image'))
+    global count 
+    count += 1
+    with open("imageToSave" + str(count) +".png", "wb") as fh:
+        fh.write(base64.decodebytes(data.get('image').encode()))
+    return {"message": "Image received"}
+    
+    
