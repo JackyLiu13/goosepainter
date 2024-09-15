@@ -179,7 +179,7 @@ const Painter = () => {
       <h1 className="text-4xl font-bold mb-4 text-center bg-black text-white p-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full max-w-3xl transform rotate-1">
         GOOSE PAINTER 🪿
       </h1>
-      <div className="flex-grow bg-white p-4 border-4 border-black border-dashed shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col w-full max-w-3xl transform -rotate-1">
+      <div className="flex-grow bg-[#C4A484] p-4 border-4 border-black border-dashed shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col w-full max-w-3xl transform -rotate-1">
         <div className="flex-grow flex flex-col">
           <div className="flex flex-wrap gap-2 mb-4 justify-center">
             <label className="flex items-center bg-yellow-300 p-2 border-2 border-black transform rotate-2">
@@ -253,7 +253,7 @@ const Painter = () => {
             className="flex-grow flex justify-center items-center"
           >
             <div
-              className="relative"
+              className="relative bg-white"
               style={{ width: CANVAS_WIDTH, height: CANVAS_HEIGHT }}
             >
               <canvas

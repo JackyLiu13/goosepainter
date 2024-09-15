@@ -4,17 +4,15 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#fbe5c8] font-sans relative">
-      {/* Falling Vine */}
-      <div className="absolute top-20 left-1/2 transform -translate-x-1/2 vines"></div>
 
       {/* Welcome and Game Title */}
-      <h1 className="m-0 text-2xl font-normal">Welcome to...</h1>
-      <h2 className="my-4 text-4xl font-bold">Our Game!</h2>
+      <h1 className="m-0 text-[20rem] font-semibold leading-none transform scale-y-110 text-[#D5B895]">GOOSE</h1>
+      <h2 className="my-4 text-4xl font-bold text-[#D5B895]">PAINTER</h2>
 
       {/* Stone Bar with Buttons */}
       <div className="justify-center mx-auto">
         <Link
-          to="/painter"
+          to="/Lobby"
           className="mx-4 px-5 py-2 text-lg bg-black text-white rounded-lg shadow-md no-underline text-center hover:bg-gray-800"
         >
           Start
