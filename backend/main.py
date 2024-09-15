@@ -2,10 +2,12 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import base64
+import os
+import groqhelp
 
 # Initialize FastAPI app
 app = FastAPI()
-
+print(os.getcwd())
 # CORS settings
 app.add_middleware(
     CORSMiddleware,
@@ -35,11 +37,16 @@ count = 0
 
 @app.post('/image')
 async def grab_image(data: dict):
-    #print(data.get('image'))
-    global count 
-    count += 1
-    with open("imageToSave" + str(count) +".png", "wb") as fh:
+    count = 0
+    for file in os.listdir('./images'):
+        if file[-3:] == "png":
+            count += 1
+    
+    with open("./images/imageToSave" + str(count) +".png", "wb") as fh:
         fh.write(base64.decodebytes(data.get('image').encode()))
+    
+    groqhelp.get_image_descriptions()
+    
     return {"message": "Image received"}
     
     
