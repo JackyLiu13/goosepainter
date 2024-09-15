@@ -90,37 +90,34 @@ const Painter = () => {
 
   const saveImage = async () => {
     const canvas = canvasRef.current;
-    const base64Canvas = canvas.toDataURL("image/png").split(';base64,')[1];
+    const base64Canvas = canvas.toDataURL("image/png").split(";base64,")[1];
     console.log(base64Canvas);
     //canvas.toDataURL(async (blob) => {
-      //const formData = new FormData();
-      //formData.append("file", blob, "painting.png");
-      //console.log(blob);
-      
+    //const formData = new FormData();
+    //formData.append("file", blob, "painting.png");
+    //console.log(blob);
 
-      try {
-        const response = await fetch("http://localhost:8000/image", {
-          method: "POST",
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            "image": base64Canvas
-          }),
-        });
+    try {
+      const response = await fetch("http://localhost:8000/image", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          image: base64Canvas,
+        }),
+      });
 
-        if (response.ok) {
-          console.log("Image uploaded successfully");
-        } else {
-          console.error("Image upload failed");
-        }
-      } catch (error) {
-        console.error("Error uploading image:", error);
+      if (response.ok) {
+        console.log("Image uploaded successfully");
+      } else {
+        console.error("Image upload failed");
       }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
   };
-
-  
 
   const clearCanvas = () => {
     const canvas = canvasRef.current;
