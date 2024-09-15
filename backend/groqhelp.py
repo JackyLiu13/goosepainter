@@ -1,10 +1,13 @@
 import os
 from groq import Groq
 import base64
+from dotenv import load_dotenv
 
+# Load environment variables from .env file
+load_dotenv()
+    
 # Fetch the API key from environment variables
-api_key = os.environ.get("GROQ_API_KEY")
-
+api_key = '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'
 # Initialize the client with the API key
 client = Groq(api_key=api_key)
 
